@@ -3,6 +3,7 @@ import Leaflet from "leaflet";
 import { MapContainer, TileLayer, CircleMarker, Popup } from "react-leaflet";
 
 import "leaflet/dist/leaflet.css";
+import DataLine from "./dataLine";
 
 Leaflet.Icon.Default.imagePath =
   "//cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.0/images/";
@@ -106,8 +107,12 @@ function MapComponent({ dimensions, onMarkerClick, selected }) {
     }
   ];
 
+  const darkBlueColor = {color: '#0000ff'}
+  const lightBlueColor = {color: '#4d4dff'}
+  const moreLightBlueColor = {color: '#8080ff'}
+  const extraLightBlueColor = {color: '#b3b3ff'}
 
-  const redOptions = { color: 'red' }
+
 
   return (
     <div style={style}>
@@ -118,12 +123,23 @@ function MapComponent({ dimensions, onMarkerClick, selected }) {
         />
         {dataOfCountry.map((ele) => {
           return (
-            <CircleMarker key={ele.id} center={ele.position} pathOptions={redOptions} radius={ele.data/50}>
+            <CircleMarker 
+              key={ele.id}
+              center={ele.position}
+              pathOptions={
+              ele.data < 1000 && ele.data > 750 ? 
+              darkBlueColor :
+              ele.data < 750 && ele.data > 500 ?
+              lightBlueColor :
+              ele.data < 500 && ele.data > 250 ?
+              moreLightBlueColor : extraLightBlueColor
+              } radius={ele.data/50}>
               <Popup>Region: {ele.region} <br/> Data: {ele.data} </Popup>
             </CircleMarker>
           )
         })}
       </MapContainer>
+      <DataLine />
     </div>
   );
 }
